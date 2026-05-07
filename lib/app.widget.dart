@@ -13,7 +13,7 @@ class AppWidget extends StatelessWidget {
       title: 'Mini Universidad',
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.indigo,
+        colorSchemeSeed: Color.fromARGB(255, 196, 128, 162),
       ),
     );
   }

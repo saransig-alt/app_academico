@@ -1,8 +1,10 @@
 import 'package:go_router/go_router.dart';
+import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
 import '../../pages/profile.page.dart';
 import '../../pages/students.page.dart';
 import '../../widgets/app.shell.widget.dart';
+import '../../pages/students.detail.page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/home',
@@ -31,6 +33,20 @@ final GoRouter appRouter = GoRouter(
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: '/student/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+
+        return StudentDetailPage(id: id);
+      },
+    ),
+    GoRoute(
+      path: '/chat',
+      builder: (context, state) {
+        return const ChatPage();
+      },
     ),
   ],
 );
