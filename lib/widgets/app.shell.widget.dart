@@ -16,8 +16,11 @@ class AppShellWidget extends StatelessWidget {
       case '/students':
         return 1;
 
-      case '/profile':
+      case '/subjects':
         return 2;
+
+      case '/profile':
+        return 3;
 
       default:
         return 0;
@@ -33,7 +36,8 @@ class AppShellWidget extends StatelessWidget {
         child: child,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: obtenerIndex(context),
+        currentIndex: obtenerIndex(context),   
+        type: BottomNavigationBarType.fixed,   
         onTap: (index) {
           switch (index) {
             case 0:
@@ -43,10 +47,15 @@ class AppShellWidget extends StatelessWidget {
             case 1:
               context.go('/students');
               break;
-
+            
             case 2:
-              context.go('/profile');
+              context.go('/subjects');
               break;
+
+            case 3:
+              context.go('/profile');
+              break;   
+            
           }
         },
         items: const [
@@ -55,7 +64,9 @@ class AppShellWidget extends StatelessWidget {
             icon: Icon(Icons.school),
             label: 'Estudiantes',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Materias'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+          
         ],
       ),
     );
