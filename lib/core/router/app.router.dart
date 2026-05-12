@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
 import '../../pages/profile.page.dart';
-import '../../pages/students.page.dart';
+import '../../features/students/pages/students.page.dart';
 import '../../widgets/app.shell.widget.dart';
-import '../../pages/students.detail.page.dart';
+import '../../features/students/pages/students.detail.page.dart';
 import '../../pages/subjects.page.dart';
 import '../../pages/subjects.detail.page.dart';
 
@@ -52,12 +52,11 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/subject/:name',
-      builder: (context, state) {
-        final name = state.pathParameters['name']!;
-        return SubjectDetailPage(name: name);
-      } 
-    ),
+        path: '/subject/:name',
+        builder: (context, state) {
+          final name = state.pathParameters['name']!;
+          return SubjectDetailPage(name: name);
+        }),
     GoRoute(
       path: '/chat',
       builder: (context, state) {
