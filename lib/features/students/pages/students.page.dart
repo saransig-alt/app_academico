@@ -31,7 +31,7 @@ class StudentsPage extends StatelessWidget {
         final student = students[index];
 
         return _StudentCard(
-            nombre: "${student.firstName} ${student.lastName}", index: index);
+            nombre: "${student.firstName} ${student.lastName}", id: student.id);
       },
     );
   }
@@ -39,15 +39,15 @@ class StudentsPage extends StatelessWidget {
 
 class _StudentCard extends StatelessWidget {
   final String nombre;
-  final int index;
+  final int id;
 
-  const _StudentCard({required this.nombre, required this.index});
+  const _StudentCard({required this.nombre, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('/student/${index + 1}');
+        context.push("/student/$id");
       },
       child: Card(
         elevation: 4,

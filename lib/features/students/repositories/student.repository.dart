@@ -26,7 +26,7 @@ class StudentRepository {
       photoUrl: "",
     ),
     Student(
-      id: 2,
+      id: 3,
       code: "STU003",
       firstName: "Hefziba",
       lastName: "Saransig",

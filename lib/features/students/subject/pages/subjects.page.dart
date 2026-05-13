@@ -20,13 +20,13 @@ class SubjectsPage extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: subjects.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: 1,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.75,
+        childAspectRatio: 1.5,
       ),
-      itemBuilder: (context, index) {
-        final subject = subjects[index];
+      itemBuilder: (context, id) {
+        final subject = subjects[id];
 
         return _SubjectCard(
           id: subject.id,
