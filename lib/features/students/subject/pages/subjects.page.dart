@@ -16,23 +16,33 @@ class SubjectsPage extends StatelessWidget {
       );
     }
 
-    return GridView.builder(
+    return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: subjects.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.5,
-      ),
       itemBuilder: (context, id) {
         final subject = subjects[id];
 
-        return _SubjectCard(
-          id: subject.id,
-          nombre: subject.name,
-          codigo: subject.code,
-          carrera: subject.knowledgeArea.career,
+        return Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListTile(
+            leading: const Icon(
+              Icons.book,
+              color: Colors.indigo,
+            ),
+            title: Text(subject.name),
+            subtitle: Text(subject.code),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+            ),
+            onTap: () {
+              context.push('/subject/${subject.id}');
+            },
+          ),
         );
       },
     );

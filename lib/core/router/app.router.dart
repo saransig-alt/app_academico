@@ -1,3 +1,7 @@
+// ignore_for_file: unused_import, prefer_const_constructors
+
+import 'package:app_academico/features/students/models/student.model.dart';
+import 'package:app_academico/features/students/pages/students.form.page.dart';
 import 'package:app_academico/features/students/pages/students.home.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.detail.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.page.dart';
@@ -29,6 +33,15 @@ final GoRouter appRouter = GoRouter(
           path: '/students',
           builder: (context, state) {
             return StudentsHomePage();
+          },
+        ),
+        GoRoute(
+          path: '/student/home',
+          builder: (context, state) {
+            final student = state.extra as Student?;
+            return StudentsFormPage(
+              student: student,
+            );
           },
         ),
         GoRoute(
