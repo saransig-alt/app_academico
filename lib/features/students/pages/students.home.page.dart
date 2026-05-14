@@ -1,9 +1,7 @@
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/pages/students.page.dart';
-import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class StudentsHomePage extends StatelessWidget {
   const StudentsHomePage({Key? key}) : super(key: key);
@@ -18,10 +16,23 @@ class StudentsHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final provider = context.read<StudentProvider>();
-          Student? estudiante = null;
           // Student? estudiante = provider.getById(1);
-          context.push('/student/home', extra: estudiante);
+          Student? estudiante;
+
+          final result = await context.push(
+            '/student/home',
+            extra: estudiante,
+          );
+
+          if (result == true && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Estudiante creado correctamente',
+                ),
+              ),
+            );
+          }
         },
         child: const Icon(Icons.add),
       ),
