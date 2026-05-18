@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/student.provider.dart';
 import '../models/student.model.dart';
+import '../../documents/providers/document.provider.dart';
 
 class StudentDetailPage extends StatelessWidget {
   final String id;
@@ -12,7 +13,6 @@ class StudentDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// Provider
     final provider = context.watch<StudentProvider>();
 
     /// Convertir id a int
@@ -75,15 +75,86 @@ class StudentDetailPage extends StatelessWidget {
               "${student.birthDate.day}/${student.birthDate.month}/${student.birthDate.year}",
             ),
 
-            const SizedBox(height: 30),
-
-            /// BOTÓN CHAT
+            const SizedBox(height: 10),
             FilledButton.icon(
               onPressed: () {
                 context.push('/chat');
               },
               icon: const Icon(Icons.chat),
               label: const Text('Abrir Chat'),
+            ),
+
+            const Divider(height: 40),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Historial Documental',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Builder(
+              builder: (context) {
+                final allDocuments = context.watch<DocumentProvider>().documents;
+                final misDocumentos = allDocuments
+                    .where((doc) => doc.studentId == studentId)
+                    .toList();
+
+                if (misDocumentos.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Text(
+                        'No existen documentos registrados',
+                        style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }
+
+                return Column(
+                  children: misDocumentos.map((doc) {
+                    return Card(
+                      color: Colors.grey[200], 
+                      elevation: 0,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: ListTile(
+                        leading: const Icon(Icons.description, color: Colors.blueGrey),
+                        title: Text(
+                          doc.title, 
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text('${doc.documentNumber} - ${doc.status}'),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                        onTap: () {
+                          context.push('/document/${doc.id}');
+                        },
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo, 
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                onPressed: () {
+                  context.push('/document/form?studentId=$id');
+                },
+                child: const Text(
+                  'Crear documento',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ],
         ),
@@ -92,7 +163,6 @@ class StudentDetailPage extends StatelessWidget {
   }
 }
 
-/// Widget reutilizable
 class _infoTile extends StatelessWidget {
   final IconData icon;
   final String label;

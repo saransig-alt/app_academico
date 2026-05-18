@@ -1,5 +1,8 @@
-// ignore_for_file: unused_import, prefer_const_constructors
 
+import 'package:app_academico/features/documents/models/document.model.dart';
+import 'package:app_academico/features/documents/pages/documents.detail.page.dart';
+import 'package:app_academico/features/documents/pages/documents.form.page.dart';
+import 'package:app_academico/features/documents/pages/documents.home.page.dart';
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/pages/students.form.page.dart';
 import 'package:app_academico/features/students/pages/students.home.page.dart';
@@ -9,7 +12,6 @@ import 'package:go_router/go_router.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
 import '../../pages/profile.page.dart';
-import '../../features/students/pages/students.page.dart';
 import '../../features/students/pages/students.detail.page.dart';
 import '../../widgets/app.shell.widget.dart';
 
@@ -36,12 +38,9 @@ final GoRouter appRouter = GoRouter(
           },
         ),
         GoRoute(
-          path: '/student/home',
+          path: '/documents',
           builder: (context, state) {
-            final student = state.extra as Student?;
-            return StudentsFormPage(
-              student: student,
-            );
+            return const DocumentsHomePage();
           },
         ),
         GoRoute(
@@ -60,6 +59,28 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
+      path: '/student/home',
+      builder: (context, state) {
+        final student = state.extra as Student?;
+        return StudentsFormPage(
+          student: student,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/document/form',
+      builder: (context, state) {
+        final document = state.extra as Document?;
+        final studentId =
+            state.uri.queryParameters['studentId']; 
+
+        return DocumentsFormPage(
+          document: document,
+          studentId: studentId, 
+        );
+      },
+    ),
+    GoRoute(
       path: '/student/:id',
       builder: (context, state) {
         final id = state.pathParameters['id']!;
@@ -70,7 +91,6 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    /// SUBJECT DETAIL
     GoRoute(
       path: '/subject/:id',
       builder: (context, state) {
@@ -78,6 +98,16 @@ final GoRouter appRouter = GoRouter(
 
         return SubjectDetailPage(
           id: id,
+        );
+      },
+    ),
+
+    GoRoute(
+      path: '/document/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return DocumentDetailPage(
+          id: id, 
         );
       },
     ),

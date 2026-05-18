@@ -1,3 +1,4 @@
+import 'package:app_academico/features/documents/providers/document.provider.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:app_academico/features/students/subject/providers/subject.provider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => SubjectProvider()..loadSubjects(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DocumentProvider()..loadDocuments(),
         ),
       ],
       child: const AppWidget(),
