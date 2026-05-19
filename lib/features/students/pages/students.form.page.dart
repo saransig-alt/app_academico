@@ -1,3 +1,5 @@
+import 'package:app_academico/features/carrera/models/carrera.model.dart';
+import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
   late final TextEditingController _codeCtrl;
   late final TextEditingController _firstNameCtrl;
   late final TextEditingController _lastNameCtrl;
+  int? _selectedCareerId;
   bool get isEdit => widget.student != null;
 
   @override
@@ -34,10 +37,16 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
     _lastNameCtrl = TextEditingController(
       text: s?.lastName ?? '',
     );
+    _selectedCareerId = s?.careerId;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CarreraProvider>().loadCareers();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final careers = context.watch<CarreraProvider>().careers;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,6 +65,31 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
                   _SectionTitle(title: 'Información Académica'),
                   _buildTextField(_codeCtrl, 'Código', Icons.badge,
                       required: true),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: DropdownButtonFormField<int>(
+                      value: _selectedCareerId,
+                      decoration: const InputDecoration(
+                        labelText: 'Selecciona la Carrera',
+                        prefixIcon: Icon(Icons.school),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: careers.map((carrera) {
+                        return DropdownMenuItem<int>(
+                          value: carrera.id,
+                          child: Text(carrera.nombre),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCareerId = value;
+                        });
+                      },
+                      validator: (value) => value == null
+                          ? 'Por favor selecciona una carrera'
+                          : null,
+                    ),
+                  ),
                   _SectionTitle(title: 'Datos Personales'),
                   _buildTextField(_firstNameCtrl, 'Nombres', Icons.person,
                       required: true),
@@ -83,6 +117,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
       code: _codeCtrl.text.trim(),
       firstName: _firstNameCtrl.text.trim(),
       lastName: _lastNameCtrl.text.trim(),
+      careerId: _selectedCareerId!,
       gender: "",
       birthDate: DateTime.now(),
       email: "",

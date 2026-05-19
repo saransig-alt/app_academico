@@ -33,6 +33,7 @@ class Student {
   String code;
   String firstName;
   String lastName;
+  int careerId;
   String gender;
   DateTime birthDate;
   String email;
@@ -44,6 +45,7 @@ class Student {
     required this.code,
     required this.firstName,
     required this.lastName,
+    required this.careerId,
     required this.gender,
     required this.birthDate,
     required this.email,
@@ -56,6 +58,7 @@ class Student {
         code: json["code"],
         firstName: json["firstName"],
         lastName: json["lastName"],
+        careerId: json["careerId"] ?? 1,
         gender: json["gender"],
         birthDate: DateTime.parse(json["birthDate"]),
         email: json["email"],
@@ -68,6 +71,7 @@ class Student {
         "code": code,
         "firstName": firstName,
         "lastName": lastName,
+        "careerId": careerId,
         "gender": gender,
         "birthDate":
             "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",

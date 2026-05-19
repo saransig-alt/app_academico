@@ -1,3 +1,4 @@
+import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/documents/providers/document.provider.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:app_academico/features/students/subject/providers/subject.provider.dart';
@@ -17,6 +18,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (_) => DocumentProvider()..loadDocuments(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CarreraProvider()..loadCareers(),
         ),
       ],
       child: const AppWidget(),

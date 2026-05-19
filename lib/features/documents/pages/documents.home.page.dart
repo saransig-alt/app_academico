@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../models/document.model.dart';
-import 'documents.page.dart'; // Tu lista real de documentos
+import 'documents.page.dart';
 
 class DocumentsHomePage extends StatelessWidget {
   const DocumentsHomePage({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class DocumentsHomePage extends StatelessWidget {
       appBar: AppBar(title: const Text('Documentos')),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: const DocumentsPage(), 
+        child: const DocumentsPage(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

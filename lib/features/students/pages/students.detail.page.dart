@@ -1,3 +1,5 @@
+import 'package:app_academico/features/carrera/models/carrera.model.dart';
+import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +24,14 @@ class StudentDetailPage extends StatelessWidget {
     final Student? student =
         studentId != null ? provider.getById(studentId) : null;
 
+    final carreras = context.watch<CarreraProvider>().careers;
+    final carreraEstudiante = student != null
+        ? carreras.firstWhere(
+            (c) => c.id == student.careerId,
+            orElse: () => Carrera(id: 0, nombre: 'Sin Carrera asignada'),
+          )
+        : null;
+
     /// Si no existe
     if (student == null) {
       return Scaffold(
@@ -31,7 +41,15 @@ class StudentDetailPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('${student.firstName} ${student.lastName}')),
+      appBar: AppBar(
+        title: Text('${student.firstName} ${student.lastName}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {},
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -63,10 +81,24 @@ class StudentDetailPage extends StatelessWidget {
               'Código: ${student.code}',
               style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 6),
+
+            /// CARRERA
+            Text(
+              carreraEstudiante?.nombre ?? 'Sin carrera asignada',
+              style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
+            ),
+
+            const Divider(height: 30),
 
             const Divider(height: 30),
 
             _infoTile(Icons.badge, "Género", student.gender),
+            _infoTile(
+              Icons.school,
+              "Carrera",
+              carreraEstudiante?.nombre ?? 'Sin Carrera asignada',
+            ),
             _infoTile(Icons.email, "Email", student.email),
             _infoTile(Icons.phone, "Teléfono", student.phone),
             _infoTile(
@@ -95,7 +127,8 @@ class StudentDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             Builder(
               builder: (context) {
-                final allDocuments = context.watch<DocumentProvider>().documents;
+                final allDocuments =
+                    context.watch<DocumentProvider>().documents;
                 final misDocumentos = allDocuments
                     .where((doc) => doc.studentId == studentId)
                     .toList();
@@ -106,7 +139,8 @@ class StudentDetailPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'No existen documentos registrados',
-                        style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, color: Colors.grey),
                       ),
                     ),
                   );
@@ -115,13 +149,14 @@ class StudentDetailPage extends StatelessWidget {
                 return Column(
                   children: misDocumentos.map((doc) {
                     return Card(
-                      color: Colors.grey[200], 
+                      color: Colors.grey[200],
                       elevation: 0,
                       margin: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
-                        leading: const Icon(Icons.description, color: Colors.blueGrey),
+                        leading: const Icon(Icons.description,
+                            color: Colors.blueGrey),
                         title: Text(
-                          doc.title, 
+                          doc.title,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text('${doc.documentNumber} - ${doc.status}'),
@@ -142,10 +177,11 @@ class StudentDetailPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo, 
+                  backgroundColor: Colors.indigo,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
                   context.push('/document/form?studentId=$id');
