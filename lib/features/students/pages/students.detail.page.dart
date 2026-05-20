@@ -1,3 +1,4 @@
+import 'package:app_academico/core/widgets/Info.title.dart';
 import 'package:app_academico/features/carrera/models/carrera.model.dart';
 import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:flutter/material.dart';
@@ -100,15 +101,15 @@ class StudentDetailPage extends StatelessWidget {
             ),
             const Divider(height: 30),
 
-            _infoTile(Icons.badge, "Género", student.gender),
-            _infoTile(
+            InfoTile(Icons.badge, "Género", student.gender),
+            InfoTile(
               Icons.school,
               "Carrera",
               carreraEstudiante?.nombre ?? 'Sin Carrera asignada',
             ),
-            _infoTile(Icons.email, "Email", student.email),
-            _infoTile(Icons.phone, "Teléfono", student.phone),
-            _infoTile(
+            InfoTile(Icons.email, "Email", student.email),
+            InfoTile(Icons.phone, "Teléfono", student.phone),
+            InfoTile(
               Icons.cake,
               "Fecha nacimiento",
               "${student.birthDate.day}/${student.birthDate.month}/${student.birthDate.year}",
@@ -202,23 +203,6 @@ class StudentDetailPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _infoTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-
-  const _infoTile(this.icon, this.label, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(label),
-      subtitle: Text(value),
     );
   }
 }

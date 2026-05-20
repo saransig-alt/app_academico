@@ -1,4 +1,4 @@
-import 'package:app_academico/features/carrera/models/carrera.model.dart';
+import 'package:app_academico/core/widgets/section.title.dart';
 import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
@@ -42,11 +42,8 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
     _lastNameCtrl = TextEditingController(
       text: s?.lastName ?? '',
     );
-    _emailCtrl = TextEditingController(
-      text: s?.email ?? ''
-    );
-    _phoneCtrl = TextEditingController(
-      text: s?.phone ?? '');
+    _emailCtrl = TextEditingController(text: s?.email ?? '');
+    _phoneCtrl = TextEditingController(text: s?.phone ?? '');
     _selectedGender = s?.gender.isEmpty == true ? null : s?.gender;
     _selectedBirthDate = s?.birthDate;
 
@@ -73,7 +70,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _SectionTitle(title: 'Información Académica'),
+                  SectionTitle(title: 'Información Académica'),
                   _buildTextField(_codeCtrl, 'Código', Icons.badge,
                       required: true),
                   Padding(
@@ -101,7 +98,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
                           : null,
                     ),
                   ),
-                  _SectionTitle(title: 'Datos Personales'),
+                  SectionTitle(title: 'Datos Personales'),
                   _buildTextField(_firstNameCtrl, 'Nombres', Icons.person,
                       required: true),
                   _buildTextField(
@@ -168,25 +165,6 @@ Widget _buildTextField(
           : null,
     ),
   );
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String title;
-  const _SectionTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-            ),
-      ),
-    );
-  }
 }
 
 class _SaveButton extends StatelessWidget {

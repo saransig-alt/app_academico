@@ -1,4 +1,3 @@
-
 import 'package:app_academico/features/documents/models/document.model.dart';
 import 'package:app_academico/features/documents/pages/documents.detail.page.dart';
 import 'package:app_academico/features/documents/pages/documents.form.page.dart';
@@ -8,15 +7,16 @@ import 'package:app_academico/features/students/pages/students.form.page.dart';
 import 'package:app_academico/features/students/pages/students.home.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.detail.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.page.dart';
+import 'package:app_academico/features/welcome/welcome.page.dart';
 import 'package:go_router/go_router.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
 import '../../pages/profile.page.dart';
 import '../../features/students/pages/students.detail.page.dart';
-import '../../widgets/app.shell.widget.dart';
+import '../../app/app.shell.widget.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
     ShellRoute(
       builder: (context, state, child) {
@@ -59,6 +59,13 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
+      path: '/',
+      builder: (context, state) {
+        return WelcomePage();
+      },
+    ),
+
+    GoRoute(
       path: '/student/home',
       builder: (context, state) {
         final student = state.extra as Student?;
@@ -71,12 +78,11 @@ final GoRouter appRouter = GoRouter(
       path: '/document/form',
       builder: (context, state) {
         final document = state.extra as Document?;
-        final studentId =
-            state.uri.queryParameters['studentId']; 
+        final studentId = state.uri.queryParameters['studentId'];
 
         return DocumentsFormPage(
           document: document,
-          studentId: studentId, 
+          studentId: studentId,
         );
       },
     ),
@@ -107,7 +113,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final id = state.pathParameters['id']!;
         return DocumentDetailPage(
-          id: id, 
+          id: id,
         );
       },
     ),
