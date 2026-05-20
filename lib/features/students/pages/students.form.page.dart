@@ -21,6 +21,10 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
   late final TextEditingController _codeCtrl;
   late final TextEditingController _firstNameCtrl;
   late final TextEditingController _lastNameCtrl;
+  late final TextEditingController _emailCtrl;
+  late final TextEditingController _phoneCtrl;
+  String? _selectedGender;
+  DateTime? _selectedBirthDate;
   int? _selectedCareerId;
   bool get isEdit => widget.student != null;
 
@@ -31,13 +35,20 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
     _codeCtrl = TextEditingController(
       text: s?.code ?? '',
     );
+    _selectedCareerId = s?.careerId;
     _firstNameCtrl = TextEditingController(
       text: s?.firstName ?? '',
     );
     _lastNameCtrl = TextEditingController(
       text: s?.lastName ?? '',
     );
-    _selectedCareerId = s?.careerId;
+    _emailCtrl = TextEditingController(
+      text: s?.email ?? ''
+    );
+    _phoneCtrl = TextEditingController(
+      text: s?.phone ?? '');
+    _selectedGender = s?.gender.isEmpty == true ? null : s?.gender;
+    _selectedBirthDate = s?.birthDate;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CarreraProvider>().loadCareers();
@@ -96,6 +107,10 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
                   _buildTextField(
                       _lastNameCtrl, 'Apellidos', Icons.person_outline,
                       required: true),
+                  _buildTextField(_emailCtrl, 'Correo Electrónico', Icons.email,
+                      type: TextInputType.emailAddress),
+                  _buildTextField(_phoneCtrl, 'Teléfono', Icons.phone,
+                      type: TextInputType.phone),
                   const SizedBox(height: 40),
                   _SaveButton(onPressed: _handleSave),
                 ],
@@ -118,10 +133,10 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
       firstName: _firstNameCtrl.text.trim(),
       lastName: _lastNameCtrl.text.trim(),
       careerId: _selectedCareerId!,
-      gender: "",
+      gender: _selectedGender ?? '',
       birthDate: DateTime.now(),
-      email: "",
-      phone: "",
+      email: _emailCtrl.text.trim(),
+      phone: _phoneCtrl.text.trim(),
       photoUrl: "",
     );
 

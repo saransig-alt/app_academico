@@ -46,7 +46,17 @@ class StudentDetailPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () async {},
+            onPressed: () async {
+              final result = await context.push(
+                '/student/home',
+                extra: student,
+              );
+              if (result == true && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Estudiante actualizado')),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -88,9 +98,6 @@ class StudentDetailPage extends StatelessWidget {
               carreraEstudiante?.nombre ?? 'Sin carrera asignada',
               style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
             ),
-
-            const Divider(height: 30),
-
             const Divider(height: 30),
 
             _infoTile(Icons.badge, "Género", student.gender),
