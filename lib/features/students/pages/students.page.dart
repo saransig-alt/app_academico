@@ -30,18 +30,18 @@ class StudentsPage extends StatelessWidget {
       itemBuilder: (context, index) {
         final student = students[index];
 
-        return _StudentCard(
+        return StudentCard(
             nombre: "${student.firstName} ${student.lastName}", id: student.id);
       },
     );
   }
 }
 
-class _StudentCard extends StatelessWidget {
+class StudentCard extends StatelessWidget {
   final String nombre;
   final int id;
 
-  const _StudentCard({required this.nombre, required this.id});
+  const StudentCard({required this.nombre, required this.id});
 
   @override
   Widget build(BuildContext context) {
