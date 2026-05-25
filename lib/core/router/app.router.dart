@@ -8,6 +8,7 @@ import 'package:app_academico/features/students/pages/students.home.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.detail.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.page.dart';
 import 'package:app_academico/features/welcome/welcome.page.dart';
+import 'package:app_academico/pages/login.page.dart';
 import 'package:go_router/go_router.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
@@ -63,6 +64,11 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         return WelcomePage();
       },
+    ),
+
+      GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginPage(),
     ),
 
     GoRoute(
