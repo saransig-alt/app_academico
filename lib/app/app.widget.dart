@@ -13,7 +13,7 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Mini Universidad',
 
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
 
       // LIGHT THEME
       theme: FlexThemeData.light(
