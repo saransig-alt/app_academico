@@ -1,50 +1,68 @@
-import 'package:app_academico/core/widgets/section.title.dart';
-import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/widgets/section.title.dart';
+import '../../carrera/providers/carrera.provider.dart';
 
 class StudentsFormPage extends StatefulWidget {
   final Student? student;
+
   const StudentsFormPage({
     Key? key,
     this.student,
   }) : super(key: key);
 
   @override
-  _StudentsFormPageState createState() => _StudentsFormPageState();
+  State<StudentsFormPage> createState() => _StudentsFormPageState();
 }
 
 class _StudentsFormPageState extends State<StudentsFormPage> {
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
   late final TextEditingController _codeCtrl;
   late final TextEditingController _firstNameCtrl;
   late final TextEditingController _lastNameCtrl;
   late final TextEditingController _emailCtrl;
   late final TextEditingController _phoneCtrl;
+
   String? _selectedGender;
   DateTime? _selectedBirthDate;
-  int? _selectedCareerId;
+
+  int? _selectedAcademicProgramId;
+
   bool get isEdit => widget.student != null;
 
   @override
   void initState() {
     super.initState();
+
     final s = widget.student;
+
     _codeCtrl = TextEditingController(
       text: s?.code ?? '',
     );
-    _selectedCareerId = s?.careerId;
+
     _firstNameCtrl = TextEditingController(
       text: s?.firstName ?? '',
     );
+
     _lastNameCtrl = TextEditingController(
       text: s?.lastName ?? '',
     );
-    _emailCtrl = TextEditingController(text: s?.email ?? '');
-    _phoneCtrl = TextEditingController(text: s?.phone ?? '');
+
+    _emailCtrl = TextEditingController(
+      text: s?.email ?? '',
+    );
+
+    _phoneCtrl = TextEditingController(
+      text: s?.phone ?? '',
+    );
+
+    _selectedAcademicProgramId = s?.academicProgramId;
+
     _selectedGender = s?.gender.isEmpty == true ? null : s?.gender;
+
     _selectedBirthDate = s?.birthDate;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -55,6 +73,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
   @override
   Widget build(BuildContext context) {
     final careers = context.watch<CarreraProvider>().careers;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -66,50 +85,93 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Form(
-              key: _formkey,
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SectionTitle(title: 'Información Académica'),
-                  _buildTextField(_codeCtrl, 'Código', Icons.badge,
-                      required: true),
+                  /// ============================
+                  /// INFORMACIÓN ACADÉMICA
+                  /// ============================
+                  const SectionTitle(
+                    title: 'Información Académica',
+                  ),
+
+                  _buildTextField(
+                    _codeCtrl,
+                    'Código',
+                    Icons.badge,
+                    required: true,
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: DropdownButtonFormField<int>(
-                      value: _selectedCareerId,
+                      value: _selectedAcademicProgramId,
                       decoration: const InputDecoration(
                         labelText: 'Selecciona la Carrera',
                         prefixIcon: Icon(Icons.school),
                         border: OutlineInputBorder(),
                       ),
-                      items: careers.map((carrera) {
+                      items: careers.map((career) {
                         return DropdownMenuItem<int>(
-                          value: carrera.id,
-                          child: Text(carrera.nombre),
+                          value: career.id,
+                          child: Text(career.nombre),
                         );
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          _selectedCareerId = value;
+                          _selectedAcademicProgramId = value;
                         });
                       },
-                      validator: (value) => value == null
-                          ? 'Por favor selecciona una carrera'
-                          : null,
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Por favor selecciona una carrera';
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                  SectionTitle(title: 'Datos Personales'),
-                  _buildTextField(_firstNameCtrl, 'Nombres', Icons.person,
-                      required: true),
+
+                  /// ============================
+                  /// DATOS PERSONALES
+                  /// ============================
+                  const SectionTitle(
+                    title: 'Datos Personales',
+                  ),
+
                   _buildTextField(
-                      _lastNameCtrl, 'Apellidos', Icons.person_outline,
-                      required: true),
-                  _buildTextField(_emailCtrl, 'Correo Electrónico', Icons.email,
-                      type: TextInputType.emailAddress),
-                  _buildTextField(_phoneCtrl, 'Teléfono', Icons.phone,
-                      type: TextInputType.phone),
+                    _firstNameCtrl,
+                    'Nombres',
+                    Icons.person,
+                    required: true,
+                  ),
+
+                  _buildTextField(
+                    _lastNameCtrl,
+                    'Apellidos',
+                    Icons.person_outline,
+                    required: true,
+                  ),
+
+                  _buildTextField(
+                    _emailCtrl,
+                    'Correo Electrónico',
+                    Icons.email,
+                    type: TextInputType.emailAddress,
+                  ),
+
+                  _buildTextField(
+                    _phoneCtrl,
+                    'Teléfono',
+                    Icons.phone,
+                    type: TextInputType.phone,
+                  ),
+
                   const SizedBox(height: 40),
-                  _SaveButton(onPressed: _handleSave),
+
+                  _SaveButton(
+                    onPressed: _handleSave,
+                  ),
                 ],
               ),
             ),
@@ -120,7 +182,7 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
   }
 
   void _handleSave() {
-    if (!_formkey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
 
     final provider = context.read<StudentProvider>();
 
@@ -129,15 +191,19 @@ class _StudentsFormPageState extends State<StudentsFormPage> {
       code: _codeCtrl.text.trim(),
       firstName: _firstNameCtrl.text.trim(),
       lastName: _lastNameCtrl.text.trim(),
-      careerId: _selectedCareerId!,
+      academicProgramId: _selectedAcademicProgramId!,
       gender: _selectedGender ?? '',
-      birthDate: DateTime.now(),
+      birthDate: _selectedBirthDate ?? DateTime.now(),
       email: _emailCtrl.text.trim(),
       phone: _phoneCtrl.text.trim(),
-      photoUrl: "",
+      photoUrl: '',
     );
 
-    isEdit ? provider.updateStudent(student) : provider.addStudent(student);
+    if (isEdit) {
+      provider.updateStudent(student);
+    } else {
+      provider.addStudent(student);
+    }
 
     Navigator.pop(context, true);
   }
@@ -161,7 +227,12 @@ Widget _buildTextField(
         border: const OutlineInputBorder(),
       ),
       validator: required
-          ? (v) => (v == null || v.isEmpty) ? 'Campo requerido' : null
+          ? (v) {
+              if (v == null || v.isEmpty) {
+                return 'Campo requerido';
+              }
+              return null;
+            }
           : null,
     ),
   );
@@ -169,7 +240,10 @@ Widget _buildTextField(
 
 class _SaveButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const _SaveButton({required this.onPressed});
+
+  const _SaveButton({
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +255,9 @@ class _SaveButton extends StatelessWidget {
         icon: const Icon(Icons.save),
         label: const Text(
           'GUARDAR ESTUDIANTE',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

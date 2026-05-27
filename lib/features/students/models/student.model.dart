@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final studentResponse = studentResponseFromJson(jsonString);
+// final studentResponse = studentResponseFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -20,11 +20,14 @@ class StudentResponse {
   factory StudentResponse.fromJson(Map<String, dynamic> json) =>
       StudentResponse(
         students: List<Student>.from(
-            json["students"].map((x) => Student.fromJson(x))),
+          json["students"].map((x) => Student.fromJson(x)),
+        ),
       );
 
   Map<String, dynamic> toJson() => {
-        "students": List<dynamic>.from(students.map((x) => x.toJson())),
+        "students": List<dynamic>.from(
+          students.map((x) => x.toJson()),
+        ),
       };
 }
 
@@ -33,7 +36,10 @@ class Student {
   String code;
   String firstName;
   String lastName;
-  int careerId;
+
+  /// RELACIÓN CON ACADEMIC PROGRAM
+  int academicProgramId;
+
   String gender;
   DateTime birthDate;
   String email;
@@ -45,7 +51,7 @@ class Student {
     required this.code,
     required this.firstName,
     required this.lastName,
-    required this.careerId,
+    required this.academicProgramId,
     required this.gender,
     required this.birthDate,
     required this.email,
@@ -58,7 +64,10 @@ class Student {
         code: json["code"],
         firstName: json["firstName"],
         lastName: json["lastName"],
-        careerId: json["careerId"] ?? 1,
+
+        /// FIREBASE
+        academicProgramId: json["academicProgramId"] ?? 1,
+
         gender: json["gender"],
         birthDate: DateTime.parse(json["birthDate"]),
         email: json["email"],
@@ -71,10 +80,15 @@ class Student {
         "code": code,
         "firstName": firstName,
         "lastName": lastName,
-        "careerId": careerId,
+
+        /// FIREBASE
+        "academicProgramId": academicProgramId,
+
         "gender": gender,
         "birthDate":
-            "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
+            "${birthDate.year.toString().padLeft(4, '0')}-"
+            "${birthDate.month.toString().padLeft(2, '0')}-"
+            "${birthDate.day.toString().padLeft(2, '0')}",
         "email": email,
         "phone": phone,
         "photoUrl": photoUrl,

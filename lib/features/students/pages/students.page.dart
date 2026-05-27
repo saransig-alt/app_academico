@@ -31,7 +31,8 @@ class StudentsPage extends StatelessWidget {
         final student = students[index];
 
         return StudentCard(
-            nombre: "${student.firstName} ${student.lastName}", id: student.id);
+            nombre: "${student.student.firstName} ${student.student.lastName}",
+            id: student.student.id);
       },
     );
   }
