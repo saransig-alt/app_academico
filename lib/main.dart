@@ -1,3 +1,4 @@
+import 'package:app_academico/features/academic_program/providers/academic.program.provider.dart';
 import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/documents/providers/document.provider.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'app/app.widget.dart';
 import 'package:provider/provider.dart';
 
-void main() async{
+void main() async {
   /// NECESARIO para Firebase
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,6 +21,9 @@ void main() async{
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (_) => AcademicProgramProvider()..loadAcademicPrograms(),
+        ),
         ChangeNotifierProvider(
           create: (_) => StudentProvider()..loadStudents(),
         ),

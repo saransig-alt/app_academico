@@ -64,27 +64,27 @@ class SubjectDetailPage extends StatelessWidget {
               ),
             ),
             const Divider(height: 30),
-            InfoTile(
+            InfoTitle(
               Icons.numbers,
               'Créditos',
               '${subject.credits}',
             ),
-            InfoTile(
+            InfoTitle(
               Icons.access_time,
               'Horas',
               '${subject.hours}',
             ),
-            InfoTile(
+            InfoTitle(
               Icons.category,
               'Área',
               subject.knowledgeArea.name,
             ),
-            InfoTile(
+            InfoTitle(
               Icons.school,
               'Carrera',
               subject.knowledgeArea.career,
             ),
-            InfoTile(
+            InfoTitle(
               Icons.layers,
               'Nivel',
               subject.knowledgeArea.level,

@@ -72,7 +72,7 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/student/home',
+      path: '/student/form',
       builder: (context, state) {
         final student = state.extra as Student?;
         return StudentsFormPage(

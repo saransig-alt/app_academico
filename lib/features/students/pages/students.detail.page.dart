@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/widgets/info.title.dart';
+import '../../../core/widgets/Info.title.dart';
 import '../../academic_program/model/academic.program.model.dart';
 import '../../academic_program/providers/academic.program.provider.dart';
 import '../models/student.model.dart';
@@ -15,19 +15,21 @@ class StudentDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.read<StudentProvider>();
     final providerAcademic = context.read<AcademicProgramProvider>();
-    final studentId = int.tryParse(id);
-    if (studentId == null) {
-      return const Scaffold(body: Center(child: Text('ID inválido')));
-    }
+
     return FutureBuilder<Student?>(
-      future: provider.getById(studentId),
+      future: provider.getById(id),
       builder: (context, studentSnapshot) {
+        /// LOADING
         if (studentSnapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
+        /// STUDENT
         final student = studentSnapshot.data;
+
+        /// NOT FOUND
         if (student == null) {
           return const Scaffold(
             body: Center(child: Text('Estudiante no encontrado')),
@@ -39,7 +41,10 @@ class StudentDetailPage extends StatelessWidget {
             final academicProgram = academicSnapshot.data;
             return Scaffold(
               appBar: AppBar(
-                title: Text('${student.firstName} ${student.lastName}'),
+                title: Text(
+                  '${student.firstName} '
+                  '${student.lastName}',
+                ),
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.edit),
@@ -51,7 +56,9 @@ class StudentDetailPage extends StatelessWidget {
                       if (result == true && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Estudiante actualizado correctamente'),
+                            content: Text(
+                              'Estudiante actualizado correctamente',
+                            ),
                           ),
                         );
                       }
@@ -75,21 +82,26 @@ class StudentDetailPage extends StatelessWidget {
                           : null,
                     ),
                     const SizedBox(height: 20),
+
                     /// NOMBRE
                     Text(
-                      '${student.firstName} ${student.lastName}',
+                      '${student.firstName} '
+                      '${student.lastName}',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 10),
+
                     /// CÓDIGO
                     Text(
-                      'Código: ${student.code}',
+                      'Código: '
+                      '${student.code}',
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 10),
+
                     /// ACADEMIC PROGRAM
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -103,7 +115,11 @@ class StudentDetailPage extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.school, size: 16, color: Colors.indigo),
+                          const Icon(
+                            Icons.school,
+                            size: 16,
+                            color: Colors.indigo,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             academicProgram?.name ?? 'Sin carrera',
@@ -117,19 +133,23 @@ class StudentDetailPage extends StatelessWidget {
                       ),
                     ),
                     const Divider(height: 30),
-                    /// INFO  ← único cambio: InfoTitle → InfoTile
-                    InfoTile(Icons.badge, "Género", student.gender),
-                    InfoTile(Icons.email, "Email", student.email),
-                    InfoTile(Icons.phone, "Teléfono", student.phone),
-                    InfoTile(
+                    InfoTitle(Icons.badge, "Género", student.gender),
+                    InfoTitle(Icons.email, "Email", student.email),
+                    InfoTitle(Icons.phone, "Teléfono", student.phone),
+                    InfoTitle(
                       Icons.cake,
                       "Fecha nacimiento",
-                      "${student.birthDate.day}/${student.birthDate.month}/${student.birthDate.year}",
+                      "${student.birthDate.day}/"
+                          "${student.birthDate.month}/"
+                          "${student.birthDate.year}",
                     ),
                     const SizedBox(height: 30),
+
                     /// CHAT
                     FilledButton.icon(
-                      onPressed: () => context.push('/chat'),
+                      onPressed: () {
+                        context.push('/chat');
+                      },
                       icon: const Icon(Icons.chat),
                       label: const Text('Abrir Chat'),
                     ),

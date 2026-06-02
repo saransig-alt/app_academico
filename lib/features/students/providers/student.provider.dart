@@ -1,8 +1,9 @@
+import 'package:app_academico/features/academic_program/model/academic.program.model.dart';
 import 'package:flutter/material.dart';
-import '../../academic_program/repositories/academic.program.repository.dart';
 import '../models/student.model.dart';
 import '../models/student.view.dart';
 import '../repositories/student.repository.dart';
+import '../../academic_program/repositories/academic.program.repository.dart';
 
 class StudentProvider extends ChangeNotifier {
   final StudentRepository _repository = StudentRepository();
@@ -20,7 +21,7 @@ class StudentProvider extends ChangeNotifier {
     _students = students.map((student) {
       final academicProgram = careers.firstWhere(
         (c) => c.id == student.academicProgramId,
-        orElse: () => throw Exception('Academic Program not found'),
+        orElse: () => AcademicProgram(id: 0, name: 'Sin carrera'),
       );
       return StudentView(student: student, academicProgram: academicProgram);
     }).toList();
@@ -46,7 +47,7 @@ class StudentProvider extends ChangeNotifier {
   /// ============================
   /// DELETE
   /// ============================
-  Future<void> deleteStudent(int id) async {
+  Future<void> deleteStudent(String id) async {
     await _repository.delete(id);
     await loadStudents();
   }
@@ -54,7 +55,7 @@ class StudentProvider extends ChangeNotifier {
   /// ============================
   /// GET BY ID
   /// ============================
-  Future<Student?> getById(int id) async {
+  Future<Student?> getById(String id) async {
     return await _repository.getById(id);
   }
 }

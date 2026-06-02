@@ -1,4 +1,3 @@
-import 'package:app_academico/features/academic_program/model/academic.program.model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/academic.program.model.dart';
 

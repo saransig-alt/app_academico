@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-
 import '../providers/student.provider.dart';
 
 class StudentsPage extends StatelessWidget {
   const StudentsPage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    /// ESCUCHA EL PROVIDER
-    final students = context.watch<StudentProvider>().students;
+    final estudiantes = context.watch<StudentProvider>().students;
 
-    if (students.isEmpty) {
-      return const Center(
-        child: Text("No hay estudiantes"),
-      );
+    /// LOADING
+    if (estudiantes.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
     }
-
     return GridView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: students.length,
+      itemCount: estudiantes.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 16,
@@ -28,21 +23,22 @@ class StudentsPage extends StatelessWidget {
         childAspectRatio: 0.75,
       ),
       itemBuilder: (context, index) {
-        final student = students[index];
-
-        return StudentCard(
-            nombre: "${student.student.firstName} ${student.student.lastName}",
-            id: student.student.id);
+        final estudiante = estudiantes[index].student;
+        return _StudentCard(
+          nombre: "${estudiante.firstName} "
+              "${estudiante.lastName}",
+          id: estudiante.id!,
+        );
       },
     );
   }
 }
 
-class StudentCard extends StatelessWidget {
+class _StudentCard extends StatelessWidget {
   final String nombre;
-  final int id;
+  final String id;
 
-  const StudentCard({required this.nombre, required this.id});
+  const _StudentCard({required this.nombre, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +70,7 @@ class StudentCard extends StatelessWidget {
               ),
             ),
 
-            /// INFORMACIÓN
+            /// INFO
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
