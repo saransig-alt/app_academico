@@ -10,14 +10,38 @@ import 'package:app_academico/features/students/subject/pages/subjects.page.dart
 import 'package:app_academico/features/welcome/welcome.page.dart';
 import 'package:app_academico/pages/login.page.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/users/providers/auth.provider.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
 import '../../pages/profile.page.dart';
 import '../../features/students/pages/students.detail.page.dart';
 import '../../app/app.shell.widget.dart';
 
-final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+GoRouter createRouter(AuthProvider authProvider) {
+  return GoRouter(
+    initialLocation: '/',
+    refreshListenable: authProvider,
+
+    redirect: (context, state) {
+      final isLoggedIn = authProvider.isAuthenticated;
+
+      final location = state.matchedLocation;
+
+      const publicRoutes = ['/', '/login'];
+
+      final isPublicRoute = publicRoutes.contains(location);
+
+      if (!isLoggedIn && !isPublicRoute) {
+        return '/login';
+      }
+
+      if (isLoggedIn && isPublicRoute) {
+        return '/home';
+      }
+
+      return null;
+    },
+
   routes: [
     ShellRoute(
       builder: (context, state, child) {
@@ -32,104 +56,73 @@ final GoRouter appRouter = GoRouter(
             return const HomePage();
           },
         ),
-        GoRoute(
-          path: '/students',
-          builder: (context, state) {
-            return StudentsHomePage();
-          },
-        ),
-        GoRoute(
-          path: '/documents',
-          builder: (context, state) {
-            return const DocumentsHomePage();
-          },
-        ),
-        GoRoute(
-          path: '/subjects',
-          builder: (context, state) {
-            return const SubjectsPage();
-          },
-        ),
-        GoRoute(
-          path: '/profile',
-          builder: (context, state) {
-            return const ProfilePage();
-          },
-        ),
-      ],
-    ),
-
-    GoRoute(
-      path: '/',
-      builder: (context, state) {
-        return WelcomePage();
-      },
-    ),
+       GoRoute(
+            path: '/subjects',
+            builder: (context, state) {
+              return const SubjectsPage();
+            },
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) {
+              return const ProfilePage();
+            },
+          ),
+        ],
+      ),
 
       GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginPage(),
-    ),
+        path: '/',
+        builder: (context, state) {
+          return WelcomePage();
+        },
+      ),
 
-    GoRoute(
-      path: '/student/form',
-      builder: (context, state) {
-        final student = state.extra as Student?;
-        return StudentsFormPage(
-          student: student,
-        );
-      },
-    ),
-    GoRoute(
-      path: '/document/form',
-      builder: (context, state) {
-        final document = state.extra as Document?;
-        final studentId = state.uri.queryParameters['studentId'];
+      GoRoute(
+        path: '/login',
+        builder: (context, state) {
+          return LoginPage();
+        },
+      ),
 
-        return DocumentsFormPage(
-          document: document,
-          studentId: studentId,
-        );
-      },
-    ),
-    GoRoute(
-      path: '/student/:id',
-      builder: (context, state) {
-        final id = state.pathParameters['id']!;
+      GoRoute(
+        path: '/students',
+        builder: (context, state) {
+          return StudentsHomePage();
+        },
+      ),
 
-        return StudentDetailPage(
-          id: id,
-        );
-      },
-    ),
+      GoRoute(
+        path: '/student/form',
+        builder: (context, state) {
+          final student = state.extra as Student?;
+          return StudentsFormPage(student: student);
+        },
+      ),
 
-    GoRoute(
-      path: '/subject/:id',
-      builder: (context, state) {
-        final id = state.pathParameters['id']!;
+      GoRoute(
+        path: '/student/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return StudentDetailPage(id: id);
+        },
+      ),
 
-        return SubjectDetailPage(
-          id: id,
-        );
-      },
-    ),
+      GoRoute(
+        path: '/subject/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return SubjectDetailPage(id: id);
+        },
+      ),
 
-    GoRoute(
-      path: '/document/:id',
-      builder: (context, state) {
-        final id = state.pathParameters['id']!;
-        return DocumentDetailPage(
-          id: id,
-        );
-      },
-    ),
+      GoRoute(
+        path: '/chat',
+        builder: (context, state) {
+          return const ChatPage();
+        },
+      ),
+    ],
+  );
+}
 
-    /// CHAT
-    GoRoute(
-      path: '/chat',
-      builder: (context, state) {
-        return const ChatPage();
-      },
-    ),
-  ],
-);

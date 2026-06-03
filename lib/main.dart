@@ -7,6 +7,7 @@ import 'package:app_academico/features/users/providers/user.provider.dart' show 
 import 'package:app_academico/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'app/app.startup.dart';
 import 'app/app.widget.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +49,7 @@ void main() async {
               authProvider ?? AuthProvider(userProvider: userProvider),
         ),
       ],
-      child: const AppWidget(),
+      child: const AppStartup (child: const AppWidget()),
     ),
   );
 }
