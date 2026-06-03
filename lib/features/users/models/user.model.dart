@@ -3,7 +3,8 @@ import 'dart:convert';
 UserResponse userResponseFromJson(String str) =>
     UserResponse.fromJson(json.decode(str));
 
-String userResponseToJson(UserResponse data) => json.encode(data.toJson());
+String userResponseToJson(UserResponse data) =>
+    json.encode(data.toJson());
 
 class UserResponse {
   List<User> users;
@@ -12,7 +13,8 @@ class UserResponse {
     required this.users,
   });
 
-  factory UserResponse.fromJson(Map<String, dynamic> json) => UserResponse(
+  factory UserResponse.fromJson(Map<String, dynamic> json) =>
+      UserResponse(
         users: List<User>.from(
           json["users"].map((x) => User.fromJson(x)),
         ),
@@ -91,3 +93,4 @@ class User {
     );
   }
 }
+

@@ -1,74 +1,47 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/router/app.router.dart';
+import '../features/users/providers/auth.provider.dart';
 
-class AppWidget extends StatelessWidget {
+class AppWidget extends StatefulWidget {
   const AppWidget({super.key});
+
+  @override
+  State<AppWidget> createState() => _AppWidgetState();
+}
+
+class _AppWidgetState extends State<AppWidget> {
+  late final router;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final authProvider = context.read<AuthProvider>();
+
+    router = createRouter(authProvider);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: appRouter,
+      routerConfig: router,
+
       debugShowCheckedModeBanner: false,
       title: 'Mini Universidad',
 
       themeMode: ThemeMode.system,
 
-      // LIGHT THEME
-      theme: FlexThemeData.light(
-        scheme: FlexScheme.blueM3,
-        useMaterial3: true,
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-        blendLevel: 8,
-        appBarElevation: 0,
-        transparentStatusBar: true,
-        subThemesData: const FlexSubThemesData(
-          // Bordes redondeados globales
-          defaultRadius: 22,
+      theme: FlexThemeData.light(scheme: FlexScheme.blueM3, useMaterial3: true),
 
-          // Inputs modernos
-          inputDecoratorIsFilled: true,
-          inputDecoratorBorderType: FlexInputBorderType.outline,
-          inputDecoratorRadius: 16,
-
-          // Cards
-          cardRadius: 20,
-
-          // Botones flotantes
-          fabUseShape: true,
-
-          // Efectos visuales
-          interactionEffects: true,
-
-          // Mejor contraste
-          blendOnLevel: 10,
-          blendOnColors: false,
-        ),
-      ),
-
-      // DARK THEME
       darkTheme: FlexThemeData.dark(
-        scheme: FlexScheme.blueM3,
+        scheme: FlexScheme.outerSpace,
         useMaterial3: true,
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-        blendLevel: 12,
-        appBarElevation: 0,
-        transparentStatusBar: true,
-        subThemesData: const FlexSubThemesData(
-          defaultRadius: 22,
-          inputDecoratorIsFilled: true,
-          inputDecoratorBorderType: FlexInputBorderType.outline,
-          inputDecoratorRadius: 16,
-          cardRadius: 20,
-          fabUseShape: true,
-          interactionEffects: true,
-          blendOnLevel: 12,
-          blendOnColors: false,
-        ),
       ),
     );
   }
 }
+
+

@@ -40,16 +40,23 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => CarreraProvider()..loadCareers(),
         ),
-        /// AUTH
+               ChangeNotifierProvider(create: (_) => UserProvider()),
+
+        /// ============================
+        /// AUTHENTICATION
+        /// ============================
         ChangeNotifierProxyProvider<UserProvider, AuthProvider>(
           create: (context) =>
               AuthProvider(userProvider: context.read<UserProvider>()),
 
-          update: (context, userProvider, authProvider) =>
-              authProvider ?? AuthProvider(userProvider: userProvider),
+          update: (context, userProvider, previous) =>
+              previous ?? AuthProvider(userProvider: userProvider),
         ),
       ],
-      child: const AppStartup (child: const AppWidget()),
+
+      child: const AppStartup(child: AppWidget()),
     ),
+
+
   );
 }
