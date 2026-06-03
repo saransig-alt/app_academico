@@ -3,11 +3,14 @@ import 'package:app_academico/features/carrera/providers/carrera.provider.dart';
 import 'package:app_academico/features/documents/providers/document.provider.dart';
 import 'package:app_academico/features/students/providers/student.provider.dart';
 import 'package:app_academico/features/students/subject/providers/subject.provider.dart';
+import 'package:app_academico/features/users/providers/user.provider.dart' show UserProvider;
 import 'package:app_academico/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'app/app.widget.dart';
 import 'package:provider/provider.dart';
+
+import 'features/users/providers/auth.provider.dart';
 
 void main() async {
   /// NECESARIO para Firebase
@@ -35,6 +38,14 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => CarreraProvider()..loadCareers(),
+        ),
+        /// AUTH
+        ChangeNotifierProxyProvider<UserProvider, AuthProvider>(
+          create: (context) =>
+              AuthProvider(userProvider: context.read<UserProvider>()),
+
+          update: (context, userProvider, authProvider) =>
+              authProvider ?? AuthProvider(userProvider: userProvider),
         ),
       ],
       child: const AppWidget(),

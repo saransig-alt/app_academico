@@ -1,10 +1,11 @@
+import 'package:app_academico/features/users/providers/user.repository.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.model.dart';
-import '../repositories/auth.repository.dart';
 
 class UserProvider extends ChangeNotifier {
-  final UserRepository _repository = UserRepository();
+  final UserRepository _repository =
+      UserRepository();
 
   List<User> _users = [];
 
@@ -27,7 +28,8 @@ class UserProvider extends ChangeNotifier {
   /// LOAD CURRENT USER
   /// ============================
   Future<void> loadUserById(String id) async {
-    _currentUser = await _repository.getById(id);
+    _currentUser =
+        await _repository.getById(id);
 
     notifyListeners();
   }
@@ -68,3 +70,4 @@ class UserProvider extends ChangeNotifier {
     await loadUsers();
   }
 }
+

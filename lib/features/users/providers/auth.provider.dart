@@ -1,70 +1,146 @@
+import 'package:app_academico/features/users/providers/user.provider.dart';
+import 'package:app_academico/features/users/providers/user.repository.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../models/user.model.dart';
 import '../repositories/auth.repository.dart';
 
-class UserProvider extends ChangeNotifier {
-  final UserRepository _repository = UserRepository();
 
-  List<User> _users = [];
+class AuthProvider extends ChangeNotifier {
+  final AuthRepository _authRepository = AuthRepository();
 
-  List<User> get users => _users;
+  final UserRepository _userRepository = UserRepository();
 
-  User? _currentUser;
+  final UserProvider userProvider;
 
-  User? get currentUser => _currentUser;
+  AuthProvider({required this.userProvider});
+
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  bool _isAuthenticated = false;
+
+  bool get isAuthenticated => _isAuthenticated;
+
+  String? _errorMessage;
+
+  String? get errorMessage => _errorMessage;
 
   /// ============================
-  /// LOAD ALL
+  /// INIT SESSION
   /// ============================
-  Future<void> loadUsers() async {
-    _users = await _repository.getAll();
+   Future<void> initAuth() async {
+    final firebaseUser = _authRepository.currentUser;
+
+    if (firebaseUser == null) {
+      _isAuthenticated = false;
+
+      userProvider.clearCurrentUser();
+
+      notifyListeners();
+
+      return;
+    }
+
+    await userProvider.loadUserById(firebaseUser.uid);
+
+    if (userProvider.currentUser == null) {
+      _isAuthenticated = false;
+
+      return;
+    }
+
+    _isAuthenticated = true;
 
     notifyListeners();
   }
 
   /// ============================
-  /// LOAD CURRENT USER
+  /// LOGIN
   /// ============================
-  Future<void> loadUserById(String id) async {
-    _currentUser = await _repository.getById(id);
+Future<void> login(String email, String password) async {
+    _setLoading(true);
+
+    try {
+      final credential = await _authRepository.login(email, password);
+
+      final firebaseUser = credential.user;
+
+      if (firebaseUser == null) {
+        throw Exception('Usuario inválido');
+      }
+
+      await userProvider.loadUserById(firebaseUser.uid);
+
+      if (userProvider.currentUser == null) {
+        throw Exception('Usuario no encontrado en Firestore');
+      }
+
+      _isAuthenticated = true;
+
+      _errorMessage = null;
+
+      notifyListeners();
+    } on auth.FirebaseAuthException catch (e) {
+      _errorMessage = e.message;
+
+      notifyListeners();
+
+      throw Exception(e.message ?? 'Error de autenticación');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// ============================
+  /// REGISTER
+  /// ============================
+  Future<void> register(User user, String password) async {
+    _setLoading(true);
+
+    try {
+      final credential = await _authRepository.register(user.email, password);
+
+      final uid = credential.user!.uid;
+
+      final newUser = user.copyWith(id: uid);
+
+      await _userRepository.create(newUser);
+
+      await userProvider.loadUserById(uid);
+
+      _isAuthenticated = true;
+
+      _errorMessage = null;
+    } catch (e) {
+      _errorMessage = e.toString();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// ============================
+  /// LOGOUT
+  /// ============================
+  Future<void> logout() async {
+    await _authRepository.logout();
+
+    userProvider.clearCurrentUser();
+
+    _isAuthenticated = false;
 
     notifyListeners();
   }
 
   /// ============================
-  /// CLEAR CURRENT USER
+  /// LOADING
   /// ============================
-  void clearCurrentUser() {
-    _currentUser = null;
+  void _setLoading(bool value) {
+    _isLoading = value;
 
     notifyListeners();
-  }
-
-  /// ============================
-  /// CREATE
-  /// ============================
-  Future<void> addUser(User user) async {
-    await _repository.create(user);
-
-    await loadUsers();
-  }
-
-  /// ============================
-  /// UPDATE
-  /// ============================
-  Future<void> updateUser(User user) async {
-    await _repository.update(user);
-
-    await loadUsers();
-  }
-
-  /// ============================
-  /// DELETE
-  /// ============================
-  Future<void> deleteUser(String id) async {
-    await _repository.delete(id);
-
-    await loadUsers();
   }
 }
