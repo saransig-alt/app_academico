@@ -135,7 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: Column(
@@ -186,8 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             child: TextFormField(
                               controller: emailController,
-                              keyboardType:
-                                  TextInputType.emailAddress,
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Correo electrónico",
@@ -215,9 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 30),
-
                   FadeInUp(
                     duration: const Duration(milliseconds: 1900),
                     child: GestureDetector(
@@ -227,8 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10),
                           gradient: const LinearGradient(
                             colors: [
                               Color.fromRGBO(
@@ -255,17 +250,28 @@ class _LoginPageState extends State<LoginPage> {
                                   "Iniciar Sesión",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight:
-                                        FontWeight.bold,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                         ),
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 70),
-
+                  const SizedBox(height: 20),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1950),
+                    child: GestureDetector(
+                      onTap: () => context.go('/register'),
+                      child: const Text(
+                        "¿No tienes cuenta? Regístrate",
+                        style: TextStyle(
+                          color: Color.fromRGBO(143, 148, 251, 1),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   FadeInUp(
                     duration: const Duration(milliseconds: 2000),
                     child: const Text(

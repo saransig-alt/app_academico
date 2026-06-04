@@ -1,5 +1,7 @@
+import 'package:app_academico/features/users/providers/auth.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class AppShellWidget extends StatelessWidget {
   final Widget child;
@@ -12,19 +14,14 @@ class AppShellWidget extends StatelessWidget {
     switch (location) {
       case '/home':
         return 0;
-
       case '/students':
         return 1;
-
       case '/subjects':
         return 2;
-
       case '/documents':
         return 3;
-
       case '/profile':
         return 4;
-
       default:
         return 0;
     }
@@ -33,7 +30,19 @@ class AppShellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Mini Universidad')),
+      appBar: AppBar(
+        title: const Text('Mini Universidad'),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await context.read<AuthProvider>().logout();
+              if (context.mounted) context.go('/login');
+            },
+          ),
+        ],
+      ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: child,
@@ -46,19 +55,15 @@ class AppShellWidget extends StatelessWidget {
             case 0:
               context.go('/home');
               break;
-
             case 1:
               context.push('/students');
               break;
-
             case 2:
               context.go('/subjects');
               break;
-
             case 3:
               context.go('/documents');
               break;
-
             case 4:
               context.go('/profile');
               break;
@@ -67,9 +72,7 @@ class AppShellWidget extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Estudiantes',
-          ),
+              icon: Icon(Icons.school), label: 'Estudiantes'),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Materias'),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Documentos'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),

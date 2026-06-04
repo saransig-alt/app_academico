@@ -2,14 +2,15 @@ import 'package:app_academico/features/documents/models/document.model.dart';
 import 'package:app_academico/features/documents/pages/documents.detail.page.dart';
 import 'package:app_academico/features/documents/pages/documents.form.page.dart';
 import 'package:app_academico/features/documents/pages/documents.home.page.dart';
+import 'package:app_academico/features/login/pages/login.page.dart';
 import 'package:app_academico/features/students/models/student.model.dart';
 import 'package:app_academico/features/students/pages/students.form.page.dart';
 import 'package:app_academico/features/students/pages/students.home.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.detail.page.dart';
 import 'package:app_academico/features/students/subject/pages/subjects.page.dart';
 import 'package:app_academico/features/welcome/welcome.page.dart';
-import 'package:app_academico/pages/login.page.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/login/pages/register.page.dart';
 import '../../features/users/providers/auth.provider.dart';
 import '../../pages/chat.page.dart';
 import '../../pages/home.pages.dart';
@@ -21,13 +22,12 @@ GoRouter createRouter(AuthProvider authProvider) {
   return GoRouter(
     initialLocation: '/',
     refreshListenable: authProvider,
-
     redirect: (context, state) {
       final isLoggedIn = authProvider.isAuthenticated;
 
       final location = state.matchedLocation;
 
-      const publicRoutes = ['/', '/login'];
+      const publicRoutes = ['/', '/login', '/register'];
 
       final isPublicRoute = publicRoutes.contains(location);
 
@@ -41,22 +41,21 @@ GoRouter createRouter(AuthProvider authProvider) {
 
       return null;
     },
-
-  routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return AppShellWidget(
-          child: child,
-        );
-      },
-      routes: [
-        GoRoute(
-          path: '/home',
-          builder: (context, state) {
-            return const HomePage();
-          },
-        ),
-       GoRoute(
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return AppShellWidget(
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: '/home',
+            builder: (context, state) {
+              return const HomePage();
+            },
+          ),
+          GoRoute(
             path: '/subjects',
             builder: (context, state) {
               return const SubjectsPage();
@@ -70,28 +69,30 @@ GoRouter createRouter(AuthProvider authProvider) {
           ),
         ],
       ),
-
       GoRoute(
         path: '/',
         builder: (context, state) {
           return WelcomePage();
         },
       ),
-
       GoRoute(
         path: '/login',
         builder: (context, state) {
           return LoginPage();
         },
       ),
-
+      GoRoute(
+        path: '/register',
+        builder: (context, state) {
+          return const RegisterPage();
+        },
+      ),
       GoRoute(
         path: '/students',
         builder: (context, state) {
           return StudentsHomePage();
         },
       ),
-
       GoRoute(
         path: '/student/form',
         builder: (context, state) {
@@ -99,7 +100,6 @@ GoRouter createRouter(AuthProvider authProvider) {
           return StudentsFormPage(student: student);
         },
       ),
-
       GoRoute(
         path: '/student/:id',
         builder: (context, state) {
@@ -107,7 +107,6 @@ GoRouter createRouter(AuthProvider authProvider) {
           return StudentDetailPage(id: id);
         },
       ),
-
       GoRoute(
         path: '/subject/:id',
         builder: (context, state) {
@@ -115,7 +114,6 @@ GoRouter createRouter(AuthProvider authProvider) {
           return SubjectDetailPage(id: id);
         },
       ),
-
       GoRoute(
         path: '/chat',
         builder: (context, state) {
@@ -125,4 +123,3 @@ GoRouter createRouter(AuthProvider authProvider) {
     ],
   );
 }
-
