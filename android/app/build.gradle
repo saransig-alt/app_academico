@@ -28,7 +28,9 @@ if (flutterVersionName == null) {
 android {
     namespace "com.example.app_academico"
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    
+    // 1. CAMBIO AQUÍ: Forzamos la versión del NDK que te pidió Firebase
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,7 +50,10 @@ android {
         applicationId "com.example.app_academico"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        
+        // 2. CAMBIO AQUÍ: Cambiamos 'flutter.minSdkVersion' por 23 para que Firebase no proteste
+        minSdkVersion 23
+        
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

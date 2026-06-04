@@ -30,7 +30,17 @@ class HomePage extends StatelessWidget {
                 style:
                     const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: user.photoUrl.isNotEmpty
+                    ? NetworkImage(user.photoUrl)
+                    : null,
+                child: user.photoUrl.isEmpty
+                    ? const Icon(Icons.person, size: 40)
+                    : null,
+              ),
+              const SizedBox(height: 15),
               const Text(
                 'Ejemplo didáctico usando GoRouter + ShellRoute',
                 style: TextStyle(fontSize: 18),
