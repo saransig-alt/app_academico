@@ -67,6 +67,13 @@ GoRouter createRouter(AuthProvider authProvider) {
               return const ProfilePage();
             },
           ),
+          GoRoute(
+            // ← AGREGADO
+            path: '/documents',
+            builder: (context, state) {
+              return const DocumentsHomePage();
+            },
+          ),
         ],
       ),
       GoRoute(
